@@ -176,7 +176,14 @@ class _LandInspectorState extends State<LandInspector> {
                       flex: 5),
                   Expanded(
                     child: Center(
-                      child: Text('Area',
+                      child: Text('Owner Name',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    flex: 2,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text('Electricity Required',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     flex: 3,
@@ -184,27 +191,6 @@ class _LandInspectorState extends State<LandInspector> {
                   Expanded(
                     child: Center(
                       child: Text('Price',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    flex: 2,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text('PID',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    flex: 2,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text('SurveyNo.',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    flex: 2,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text('Document',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     flex: 2,
@@ -239,37 +225,23 @@ class _LandInspectorState extends State<LandInspector> {
               ),
               Expanded(
                   child: Center(
-                    child: Text(data[9].toString()),
+                    child: Text(data[7].toString()),
                   ),
                   flex: 5),
+              Expanded(child: Center(child: Text(data[5].toString())), flex: 2),
               Expanded(
                   child: Center(
                     child: Text(
-                      data[2].toString(),
+                      data[1].toString(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   flex: 3),
               Expanded(child: Center(child: Text(data[3].toString())), flex: 2),
-              Expanded(child: Center(child: Text(data[5].toString())), flex: 2),
-              Expanded(child: Center(child: Text(data[6].toString())), flex: 2),
               Expanded(
                   child: Center(
-                      child: TextButton(
-                    onPressed: () {
-                      print(data);
-                      launchUrl(data[7].toString());
-                    },
-                    child: const Text(
-                      'View Document',
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  )),
-                  flex: 2),
-              Expanded(
-                  child: Center(
-                    child: data[10]
+                    child: data[8]
                         ? const Text('Verified')
                         : ElevatedButton(
                             onPressed: () async {

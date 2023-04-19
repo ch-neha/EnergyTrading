@@ -35,7 +35,7 @@ class MetaMaskProvider extends ChangeNotifier {
     "function UserMapping(address) public view returns(address id,string name,uint age,string city,string email,bool isUserVerified)",
     "function addLand(uint _area, string memory _address, uint landPrice,string memory _allLatiLongi, string memory _surveyNum) public",
     "function myAllLands(address id) public view returns( uint[] memory)",
-    "function lands(uint) public view returns(uint id,uint area,string landAddress,uint landPrice,string allLatitudeLongitude,uint propertyPID,string physicalSurveyNumber,string document,bool isforSell,address payable ownerAddress,bool isLandVerified)",
+    "function lands(uint) public view returns(uint id,uint area,string landAddress,uint landPrice,string allLatitudeLongitude,string physicalSurveyNumber,bool isforSell,address payable ownerAddress,bool isLandVerified)",
     "function ReturnAllLandList() public view returns(uint[] memory)",
     "function makeItforSell(uint id) public",
     "function requestforBuy(uint _landId) public",
@@ -205,22 +205,21 @@ class MetaMaskProvider extends ChangeNotifier {
   }
 
   Future<List<dynamic>> myReceivedRequest() async {
+    print("here also");
     final val = await contract.call<dynamic>('myReceivedLandRequests', []);
     print(val);
     return val;
   }
 
   Future<List<dynamic>> mySentRequest() async {
-    print("prog");
     final val = await contract.call<dynamic>('mySentLandRequests', []);
-    print(val);
     return val;
   }
 
   Future<List<dynamic>> requestInfo(dynamic requestId) async {
     final val = await contract
         .call<dynamic>('LandRequestMapping', [requestId.toString()]);
-    print("hee" + val);
+
     return val;
   }
 

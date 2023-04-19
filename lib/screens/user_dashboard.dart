@@ -131,11 +131,9 @@ class _UserDashBoardState extends State<UserDashBoard> {
       landInfo = [];
       isLoading = true;
     });
-    print("came jere");
     List<dynamic> landList;
     if (connectedWithMetamask) {
       landList = await model2.myAllLands();
-      print(landList);
     } else {
       landList = await model.myAllLands();
     }
@@ -148,6 +146,7 @@ class _UserDashBoardState extends State<UserDashBoard> {
       } else {
         temp = await model.landInfo(landList[i]);
       }
+      print(temp);
       landInfo.add(temp);
       setState(() {
         isLoading = false;
@@ -241,6 +240,7 @@ class _UserDashBoardState extends State<UserDashBoard> {
     if (connectedWithMetamask) {
       print("came here");
       requestList = await model2.myReceivedRequest();
+      print(requestList);
     } else {
       requestList = await model.myReceivedRequest();
     }
@@ -666,90 +666,6 @@ class _UserDashBoardState extends State<UserDashBoard> {
     );
   }
 
-  // Widget landGallery() {
-  //   if (isLoading) {
-  //     return const Expanded(child: Center(child: CircularProgressIndicator()));
-  //   }
-
-  //   if (LandGall.isEmpty) {
-  //     return const Expanded(
-  //         child: Center(
-  //             child: Text(
-  //       'No Lands Added yet',
-  //       style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-  //     )));
-  //   }
-  //   return Expanded(
-  //     child: Center(
-  //       child: SizedBox(
-  //         width: isDesktop ? 900 : width,
-  //         child: GridView.builder(
-  //           padding: const EdgeInsets.all(10),
-  //           scrollDirection: Axis.vertical,
-  //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //               mainAxisExtent: 440,
-  //               crossAxisCount: isDesktop ? 2 : 1,
-  //               crossAxisSpacing: 20,
-  //               mainAxisSpacing: 20),
-  //           itemCount: LandGall.length,
-  //           itemBuilder: (context, index) {
-  //             return landWid2(
-  //                 LandGall[index][10],
-  //                 LandGall[index][1].toString(),
-  //                 LandGall[index][2].toString(),
-  //                 LandGall[index][3].toString(),
-  //                 LandGall[index][9] == userInfo[0],
-  //                 LandGall[index][8], () async {
-  //               if (isUserVerified) {
-  //                 SmartDialog.showLoading();
-  //                 try {
-  //                   if (connectedWithMetamask) {
-  //                     await model2.sendRequestToBuy(LandGall[index][0]);
-  //                   } else {
-  //                     await model.sendRequestToBuy(LandGall[index][0]);
-  //                   }
-  //                   showToast("Request sent",
-  //                       context: context, backgroundColor: Colors.green);
-  //                 } catch (e) {
-  //                   print(e);
-  //                   showToast("Something Went Wrong",
-  //                       context: context, backgroundColor: Colors.red);
-  //                 }
-  //                 SmartDialog.dismiss();
-  //               } else {
-  //                 showToast("You are not verified",
-  //                     context: context, backgroundColor: Colors.red);
-  //               }
-  //             }, () {
-  //               List<String> allLatiLongi =
-  //                   LandGall[index][4].toString().split('|');
-
-  //               LandInfo landinfo = LandInfo(
-  //                   LandGall[index][1].toString(),
-  //                   LandGall[index][2].toString(),
-  //                   LandGall[index][3].toString(),
-  //                   LandGall[index][5].toString(),
-  //                   LandGall[index][6].toString(),
-  //                   LandGall[index][7].toString(),
-  //                   LandGall[index][8],
-  //                   LandGall[index][9].toString(),
-  //                   LandGall[index][10]);
-  //               Navigator.push(
-  //                   context,
-  //                   MaterialPageRoute(
-  //                       builder: (context) => viewLandDetails(
-  //                             allLatitude: allLatiLongi[0],
-  //                             allLongitude: allLatiLongi[1],
-  //                             landinfo: landinfo,
-  //                           )));
-  //             });
-  //           },
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget myLands() {
     if (isLoading) {
       return const Expanded(child: Center(child: CircularProgressIndicator()));
@@ -777,11 +693,11 @@ class _UserDashBoardState extends State<UserDashBoard> {
             itemCount: landInfo.length,
             itemBuilder: (context, index) {
               return landWid(
-                  landInfo[index][10],
+                  landInfo[index][8],
                   landInfo[index][1].toString(),
                   landInfo[index][2].toString(),
                   landInfo[index][3].toString(),
-                  landInfo[index][8],
+                  landInfo[index][6],
                   () =>
                       confirmDialog('Are you sure to make it on sell?', context,
                           () async {

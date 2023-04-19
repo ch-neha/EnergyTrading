@@ -40,7 +40,7 @@ Widget landWid(isverified, area, address, price, isForSell, makeforSellFun) =>
             height: 10,
           ),
           Text(
-            isverified ? 'Verified' : 'Not Yet Verified',
+            isverified ? 'Request Accepted' : 'Request Not Yet Accepted',
             style: const TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.blueAccent),
           ),
@@ -48,7 +48,7 @@ Widget landWid(isverified, area, address, price, isForSell, makeforSellFun) =>
             height: 10,
           ),
           Text(
-            area + ' Sq.Ft',
+            area + 'units KWH',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
           ),
           const SizedBox(
@@ -62,7 +62,7 @@ Widget landWid(isverified, area, address, price, isForSell, makeforSellFun) =>
             height: 10,
           ),
           Text(
-            'Price:' + price,
+            'Price: ' + price,
             style: const TextStyle(fontSize: 20),
           ),
           const SizedBox(
@@ -80,7 +80,7 @@ Widget landWid(isverified, area, address, price, isForSell, makeforSellFun) =>
                   : MaterialButton(
                       color: Colors.redAccent,
                       onPressed: isverified ? makeforSellFun : null,
-                      child: const Text('Make it for Sell'),
+                      child: const Text('Initiate Electicity Transfer'),
                     ),
               MaterialButton(
                 color: Colors.blueAccent,
