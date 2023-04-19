@@ -151,7 +151,7 @@ contract Land {
         userCount++;
         allUsersList[1].push(msg.sender);
         AllUsers[userCount]=msg.sender;
-        UserMapping[msg.sender] = User(msg.sender, _name, _age, _city,_email,false);
+        UserMapping[msg.sender] = User(msg.sender, _name, _age, _city,_email, false);
         //emit Registration(msg.sender);
     }
 

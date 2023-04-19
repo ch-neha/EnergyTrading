@@ -131,9 +131,11 @@ class _UserDashBoardState extends State<UserDashBoard> {
       landInfo = [];
       isLoading = true;
     });
+    print("came jere");
     List<dynamic> landList;
     if (connectedWithMetamask) {
       landList = await model2.myAllLands();
+      print(landList);
     } else {
       landList = await model.myAllLands();
     }
@@ -156,35 +158,35 @@ class _UserDashBoardState extends State<UserDashBoard> {
     });
   }
 
-  getLandGallery() async {
-    setState(() {
-      isLoading = true;
-      LandGall = [];
-    });
-    List<dynamic> landList;
-    if (connectedWithMetamask) {
-      landList = await model2.allLandList();
-    } else {
-      landList = await model.allLandList();
-    }
+  // getLandGallery() async {
+  //   setState(() {
+  //     isLoading = true;
+  //     LandGall = [];
+  //   });
+  //   List<dynamic> landList;
+  //   if (connectedWithMetamask) {
+  //     landList = await model2.allLandList();
+  //   } else {
+  //     landList = await model.allLandList();
+  //   }
 
-    // List<List<dynamic>> allInfo = [];
-    List<dynamic> temp;
-    for (int i = 0; i < landList.length; i++) {
-      if (connectedWithMetamask) {
-        temp = await model2.landInfo(landList[i]);
-      } else {
-        temp = await model.landInfo(landList[i]);
-      }
-      LandGall.add(temp);
-      setState(() {
-        isLoading = false;
-      });
-    }
-    // screen = 3;
-    isLoading = false;
-    setState(() {});
-  }
+  //   // List<List<dynamic>> allInfo = [];
+  //   List<dynamic> temp;
+  //   for (int i = 0; i < landList.length; i++) {
+  //     if (connectedWithMetamask) {
+  //       temp = await model2.landInfo(landList[i]);
+  //     } else {
+  //       temp = await model.landInfo(landList[i]);
+  //     }
+  //     LandGall.add(temp);
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  //   // screen = 3;
+  //   isLoading = false;
+  //   setState(() {});
+  // }
 
   getMySentRequest() async {
     //SmartDialog.showLoading();
@@ -196,6 +198,7 @@ class _UserDashBoardState extends State<UserDashBoard> {
     List<dynamic> requestList;
     if (connectedWithMetamask) {
       requestList = await model2.mySentRequest();
+      print(requestList);
     } else {
       requestList = await model.mySentRequest();
     }
@@ -204,6 +207,7 @@ class _UserDashBoardState extends State<UserDashBoard> {
     var pri;
     for (int i = 0; i < requestList.length; i++) {
       if (connectedWithMetamask) {
+        print("came here amma");
         temp = await model2.requestInfo(requestList[i]);
         pri = await model2.landPrice(temp[3]);
       } else {
@@ -211,7 +215,10 @@ class _UserDashBoardState extends State<UserDashBoard> {
         pri = await model.landPrice(temp[3]);
       }
       prices.add(pri);
+      print(temp);
       sentRequestInfo.add(temp);
+      print("this");
+      print(sentRequestInfo);
       isLoading = false;
 
       // SmartDialog.dismiss();
@@ -232,6 +239,7 @@ class _UserDashBoardState extends State<UserDashBoard> {
     });
     List<dynamic> requestList;
     if (connectedWithMetamask) {
+      print("came here");
       requestList = await model2.myReceivedRequest();
     } else {
       requestList = await model.myReceivedRequest();
@@ -441,6 +449,7 @@ class _UserDashBoardState extends State<UserDashBoard> {
         }
         index -= 1;
         List<dynamic> data = sentRequestInfo[index];
+        print(data);
         return Container(
           height: 60,
           decoration: const BoxDecoration(
@@ -657,89 +666,89 @@ class _UserDashBoardState extends State<UserDashBoard> {
     );
   }
 
-  Widget landGallery() {
-    if (isLoading) {
-      return const Expanded(child: Center(child: CircularProgressIndicator()));
-    }
+  // Widget landGallery() {
+  //   if (isLoading) {
+  //     return const Expanded(child: Center(child: CircularProgressIndicator()));
+  //   }
 
-    if (LandGall.isEmpty) {
-      return const Expanded(
-          child: Center(
-              child: Text(
-        'No Lands Added yet',
-        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-      )));
-    }
-    return Expanded(
-      child: Center(
-        child: SizedBox(
-          width: isDesktop ? 900 : width,
-          child: GridView.builder(
-            padding: const EdgeInsets.all(10),
-            scrollDirection: Axis.vertical,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisExtent: 440,
-                crossAxisCount: isDesktop ? 2 : 1,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20),
-            itemCount: LandGall.length,
-            itemBuilder: (context, index) {
-              return landWid2(
-                  LandGall[index][10],
-                  LandGall[index][1].toString(),
-                  LandGall[index][2].toString(),
-                  LandGall[index][3].toString(),
-                  LandGall[index][9] == userInfo[0],
-                  LandGall[index][8], () async {
-                if (isUserVerified) {
-                  SmartDialog.showLoading();
-                  try {
-                    if (connectedWithMetamask) {
-                      await model2.sendRequestToBuy(LandGall[index][0]);
-                    } else {
-                      await model.sendRequestToBuy(LandGall[index][0]);
-                    }
-                    showToast("Request sent",
-                        context: context, backgroundColor: Colors.green);
-                  } catch (e) {
-                    print(e);
-                    showToast("Something Went Wrong",
-                        context: context, backgroundColor: Colors.red);
-                  }
-                  SmartDialog.dismiss();
-                } else {
-                  showToast("You are not verified",
-                      context: context, backgroundColor: Colors.red);
-                }
-              }, () {
-                List<String> allLatiLongi =
-                    LandGall[index][4].toString().split('|');
+  //   if (LandGall.isEmpty) {
+  //     return const Expanded(
+  //         child: Center(
+  //             child: Text(
+  //       'No Lands Added yet',
+  //       style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+  //     )));
+  //   }
+  //   return Expanded(
+  //     child: Center(
+  //       child: SizedBox(
+  //         width: isDesktop ? 900 : width,
+  //         child: GridView.builder(
+  //           padding: const EdgeInsets.all(10),
+  //           scrollDirection: Axis.vertical,
+  //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //               mainAxisExtent: 440,
+  //               crossAxisCount: isDesktop ? 2 : 1,
+  //               crossAxisSpacing: 20,
+  //               mainAxisSpacing: 20),
+  //           itemCount: LandGall.length,
+  //           itemBuilder: (context, index) {
+  //             return landWid2(
+  //                 LandGall[index][10],
+  //                 LandGall[index][1].toString(),
+  //                 LandGall[index][2].toString(),
+  //                 LandGall[index][3].toString(),
+  //                 LandGall[index][9] == userInfo[0],
+  //                 LandGall[index][8], () async {
+  //               if (isUserVerified) {
+  //                 SmartDialog.showLoading();
+  //                 try {
+  //                   if (connectedWithMetamask) {
+  //                     await model2.sendRequestToBuy(LandGall[index][0]);
+  //                   } else {
+  //                     await model.sendRequestToBuy(LandGall[index][0]);
+  //                   }
+  //                   showToast("Request sent",
+  //                       context: context, backgroundColor: Colors.green);
+  //                 } catch (e) {
+  //                   print(e);
+  //                   showToast("Something Went Wrong",
+  //                       context: context, backgroundColor: Colors.red);
+  //                 }
+  //                 SmartDialog.dismiss();
+  //               } else {
+  //                 showToast("You are not verified",
+  //                     context: context, backgroundColor: Colors.red);
+  //               }
+  //             }, () {
+  //               List<String> allLatiLongi =
+  //                   LandGall[index][4].toString().split('|');
 
-                LandInfo landinfo = LandInfo(
-                    LandGall[index][1].toString(),
-                    LandGall[index][2].toString(),
-                    LandGall[index][3].toString(),
-                    LandGall[index][5].toString(),
-                    LandGall[index][6].toString(),
-                    LandGall[index][7].toString(),
-                    LandGall[index][8],
-                    LandGall[index][9].toString(),
-                    LandGall[index][10]);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => viewLandDetails(
-                              allLatitude: allLatiLongi[0],
-                              allLongitude: allLatiLongi[1],
-                              landinfo: landinfo,
-                            )));
-              });
-            },
-          ),
-        ),
-      ),
-    );
-  }
+  //               LandInfo landinfo = LandInfo(
+  //                   LandGall[index][1].toString(),
+  //                   LandGall[index][2].toString(),
+  //                   LandGall[index][3].toString(),
+  //                   LandGall[index][5].toString(),
+  //                   LandGall[index][6].toString(),
+  //                   LandGall[index][7].toString(),
+  //                   LandGall[index][8],
+  //                   LandGall[index][9].toString(),
+  //                   LandGall[index][10]);
+  //               Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                       builder: (context) => viewLandDetails(
+  //                             allLatitude: allLatiLongi[0],
+  //                             allLongitude: allLatiLongi[1],
+  //                             landinfo: landinfo,
+  //                           )));
+  //             });
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget myLands() {
     if (isLoading) {

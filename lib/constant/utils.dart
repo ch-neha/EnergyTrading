@@ -60,6 +60,7 @@ getEthToInr() async {
     String api =
         "https://api.nomics.com/v1/currencies/ticker?key=b081894c50331900a2c0e667a3c24c66482ebc8c&ids=ETH&interval=1h&convert=INR";
     var url = Uri.parse(api);
+    print(url);
     var response = await http.get(url);
     var data = jsonDecode(response.body);
     double priceInr = double.parse(data[0]['price']);

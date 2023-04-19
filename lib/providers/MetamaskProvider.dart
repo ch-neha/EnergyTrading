@@ -137,8 +137,8 @@ class MetaMaskProvider extends ChangeNotifier {
     return t;
   }
 
-  addLand(String area, String landAddress, String allLatiLongi,
-      String landPrice, String surveyNo) async {
+  addLand(String area, String landAddress, String landPrice,
+      String allLatiLongi, String surveyNo) async {
     await contract.send(
       'addLand',
       [area, landAddress, landPrice, allLatiLongi, surveyNo],
@@ -211,6 +211,7 @@ class MetaMaskProvider extends ChangeNotifier {
   }
 
   Future<List<dynamic>> mySentRequest() async {
+    print("prog");
     final val = await contract.call<dynamic>('mySentLandRequests', []);
     print(val);
     return val;
@@ -219,7 +220,7 @@ class MetaMaskProvider extends ChangeNotifier {
   Future<List<dynamic>> requestInfo(dynamic requestId) async {
     final val = await contract
         .call<dynamic>('LandRequestMapping', [requestId.toString()]);
-    //print(val);
+    print("hee" + val);
     return val;
   }
 
