@@ -75,13 +75,13 @@ Widget landWid(isverified, area, address, price, isForSell, makeforSellFun) =>
                   : MaterialButton(
                       color: Colors.redAccent,
                       onPressed: isverified ? makeforSellFun : null,
-                      child: const Text('Initiate Electicity Transfer'),
+                      child: const Text('Energy Received'),
                     ),
-              MaterialButton(
-                color: Colors.blueAccent,
-                onPressed: () {},
-                child: const Text('View Details'),
-              )
+              // MaterialButton(
+              //   color: Colors.blueAccent,
+              //   onPressed: () {},
+              //   child: const Text('View Details'),
+              // )
             ],
           )
         ],
