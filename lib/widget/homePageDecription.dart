@@ -21,6 +21,7 @@ class LeftDescription extends StatelessWidget {
         // title
         const FittedBox(
           child: Text('''Energy Trading
+For Electric Vehicles
 Using
 Blockchain''',
               style: TextStyle(

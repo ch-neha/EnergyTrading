@@ -43,11 +43,10 @@ class _home_pageState extends State<home_page> {
                     child: Container(
                       width: 600,
                       height: 804,
-                      child: SvgPicture.asset(
-                        'assets/homeimg.webp',
+                      child: Image.asset(
+                        'assets/img.jpg',
                         height: 20.0,
                         width: 20.0,
-                        allowDrawingOutsideViewBox: true,
                       ),
                     ),
                   )

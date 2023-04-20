@@ -27,15 +27,10 @@ Widget landWid(isverified, area, address, price, isForSell, makeforSellFun) =>
             width: 400,
             color: Colors.lightGreenAccent,
             child: Image.asset(
-              'assets/landimg.jpg',
+              'assets/req.jfif',
               fit: BoxFit.fill,
             ),
           ),
-          // Image(
-          //
-          //   image: NetworkImage(
-          //       'http://www.kerloguenursinghome.com/wp-content/uploads/2019/12/19038526ce9f8be4a8dba148da99ff77.jpg'),
-          // ),
           const SizedBox(
             height: 10,
           ),
