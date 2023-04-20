@@ -4,11 +4,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:land_registration/providers/LandRegisterModel.dart';
+import 'package:land_registration/providers/RequestModel.dart';
 import 'package:land_registration/constant/loadingScreen.dart';
 import 'package:land_registration/screens/ChooseLandMap.dart';
 import 'package:land_registration/screens/viewRequestDetails.dart';
-import 'package:land_registration/widget/land_container.dart';
+import 'package:land_registration/widget/request_container.dart';
 import 'package:land_registration/widget/menu_item_tile.dart';
 import 'package:mapbox_search/mapbox_search.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +36,8 @@ class _UserDashBoardState extends State<UserDashBoard> {
   String name = "";
 
   final _formKey = GlobalKey<FormState>();
-  late String energy, landAddress, landPrice, COname, allLatiLongi;
+  late String energy, landAddress, COname, allLatiLongi;
+  int energycost = 5000;
   List<List<dynamic>> landInfo = [];
   List<List<dynamic>> receivedRequestInfo = [];
   List<List<dynamic>> sentRequestInfo = [];
@@ -784,7 +785,8 @@ class _UserDashBoardState extends State<UserDashBoard> {
                     contentPadding: EdgeInsets.all(12),
                     border: OutlineInputBorder(),
                     labelText: 'Electricity required',
-                    hintText: 'Enter the amount of Electricity required',
+                    hintText:
+                        'Enter the amount of Electricity required in KWH units',
                   ),
                 ),
               ),
@@ -829,66 +831,6 @@ class _UserDashBoardState extends State<UserDashBoard> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10),
-              //   child: TextFormField(
-              //     validator: (value) {
-              //       if (value == null || value.isEmpty) {
-              //         return 'Please enter Energy Price';
-              //       }
-              //       return null;
-              //     },
-              //     //maxLength: 12,
-              //     style: const TextStyle(
-              //       fontSize: 15,
-              //     ),
-              //     keyboardType: TextInputType.number,
-              //     inputFormatters: <TextInputFormatter>[
-              //       FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
-              //     ],
-              //     onChanged: (val) {
-              //       landPrice = val;
-              //     },
-              //     //obscureText: true,
-              //     decoration: const InputDecoration(
-              //       isDense: true, // Added this
-              //       contentPadding: EdgeInsets.all(12),
-              //       border: OutlineInputBorder(),
-              //       labelText: 'Energy Price',
-              //       hintText: 'Enter Energy Price',
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10),
-              //   child: TextFormField(
-              //     validator: (value) {
-              //       if (value == null || value.isEmpty) {
-              //         return 'Please enter PID';
-              //       }
-              //       return null;
-              //     },
-              //     style: const TextStyle(
-              //       fontSize: 15,
-              //     ),
-              //     //maxLength: 10,
-              //     keyboardType: TextInputType.number,
-              //     inputFormatters: <TextInputFormatter>[
-              //       FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
-              //     ],
-              //     onChanged: (val) {
-              //       propertyID = val;
-              //     },
-              //     //obscureText: true,
-              //     decoration: const InputDecoration(
-              //       isDense: true, // Added this
-              //       contentPadding: EdgeInsets.all(12),
-              //       border: OutlineInputBorder(),
-              //       labelText: 'PID',
-              //       hintText: 'Enter Property ID',
-              //     ),
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: MaterialButton(
@@ -920,12 +862,14 @@ class _UserDashBoardState extends State<UserDashBoard> {
               //     ],
               //   ),
               // ),
-              Center(
-                child: Text(
-                  "Price: ₹25,000 per unit",
-                  style: TextStyle(color: Colors.blue, height: 15),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: const Text(
+                  "Price: ₹5,000 per KWH unit",
+                  style: TextStyle(color: Colors.red, fontSize: 25),
                 ),
               ),
+
               CustomButton(
                   'Place Request',
                   isLoading || !isUserVerified
@@ -947,7 +891,8 @@ class _UserDashBoardState extends State<UserDashBoard> {
                                   await model2.addLand(
                                       energy,
                                       addressController.text,
-                                      energy,
+                                      (int.parse(energy) * energycost)
+                                          .toString(),
                                       allLatiLongi,
                                       name);
                                 } else {

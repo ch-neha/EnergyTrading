@@ -46,7 +46,7 @@ class MetaMaskProvider extends ChangeNotifier {
     "function rejectRequest(uint _requestId) public",
     "function registerUser(string memory _name, uint _age, string memory _city, string memory _email) public",
     "function makePayment(uint _requestId) public payable",
-    "function addLandInspector(address _addr,string memory _name, uint _age, string memory _designation,string memory _city) public returns(bool)",
+    "function addLandInspector(address _addr,string memory _name, uint _age, string memory _designation,string memory _city, uint _energyavailable) public returns(bool)",
     "function isContractOwner(address _addr) public view returns(bool)",
     "function isLandInspector(address _id) public view returns (bool)",
     "function userCount() public view returns(uint)",
@@ -60,7 +60,7 @@ class MetaMaskProvider extends ChangeNotifier {
     "function changeContractOwner(address _addr)public",
     "function ReturnAllLandIncpectorList() public view returns(address[] memory)",
     "function removeLandInspector(address _addr) public",
-    "function InspectorMapping(address) public view returns(uint id,address _addr,string name,uint age,string designation,string city)"
+    "function InspectorMapping(address) public view returns(uint id,address _addr,string name,uint age,string designation,string city, uint energyavailable)"
   ];
 
   Future<void> connect() async {
@@ -166,6 +166,7 @@ class MetaMaskProvider extends ChangeNotifier {
   Future<List<dynamic>> landInspectorInfo(dynamic addr) async {
     final val =
         await contract.call<dynamic>('InspectorMapping', [addr.toString()]);
+    print("om");
     print(val);
     return val;
   }
@@ -270,8 +271,9 @@ class MetaMaskProvider extends ChangeNotifier {
   }
 
   addLandInspector(String address, String name, String age, String desig,
-      String city) async {
-    await contract.send('addLandInspector', [address, name, age, desig, city]);
+      String city, String energyavailable) async {
+    await contract.send(
+        'addLandInspector', [address, name, age, desig, city, energyavailable]);
   }
 
   Future<dynamic> landCount() async {

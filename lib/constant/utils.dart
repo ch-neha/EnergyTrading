@@ -74,7 +74,7 @@ getEthToInr() async {
 
 Widget CustomButton(text, fun) => Container(
       constraints: const BoxConstraints(maxWidth: 250.0, minHeight: 50.0),
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(15),
       child: ElevatedButton(
         onPressed: fun,
         child: Padding(
