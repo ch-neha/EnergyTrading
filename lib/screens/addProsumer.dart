@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:land_registration/providers/LandRegisterModel.dart';
+import 'package:land_registration/providers/RequestModel.dart';
 import 'package:land_registration/widget/menu_item_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -91,6 +91,9 @@ class _AddLandInspectorState extends State<AddLandInspector> {
       landList = await model2.allLandInspectorList();
     else
       landList = await model.allLandInspectorList();
+
+    print("beat it");
+    print(landList);
 
     List<List<dynamic>> info = [];
     List<dynamic> temp;
@@ -427,11 +430,11 @@ class _AddLandInspectorState extends State<AddLandInspector> {
                               });
                               try {
                                 if (connectedWithMetamask)
-                                  await model2.addLandInspector(
-                                      address, name, age, desig, city);
+                                  await model2.addLandInspector(address, name,
+                                      age, desig, city, energyavailable);
                                 else
-                                  await model.addLandInspector(
-                                      address, name, age, desig, city);
+                                  await model.addLandInspector(address, name,
+                                      age, desig, city, energyavailable);
                                 showToast("Successfully Added",
                                     context: context,
                                     backgroundColor: Colors.green);

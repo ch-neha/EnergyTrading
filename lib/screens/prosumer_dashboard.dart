@@ -2,7 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:land_registration/providers/LandRegisterModel.dart';
+import 'package:land_registration/providers/RequestModel.dart';
 import 'package:land_registration/screens/transferOwnership.dart';
 import 'package:land_registration/widget/menu_item_tile.dart';
 import 'package:provider/provider.dart';
@@ -17,20 +17,23 @@ class LandInspector extends StatefulWidget {
 }
 
 class _LandInspectorState extends State<LandInspector> {
-  var model, model2;
+  var model, model2, modell;
   final colors = <Color>[Colors.indigo, Colors.blue, Colors.orange, Colors.red];
   List<List<dynamic>> userData = [];
+  List<List<dynamic>> prosumerData = [];
   List<List<dynamic>> landData = [];
   List<List<dynamic>> paymenList = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int screen = 0;
+  var energyavailable;
+  String proname = '';
   bool isFirstTimeLoad = true;
   dynamic userCount = -1, landCount = -1;
   bool isLoading = false;
 
   List<Menu> menuItems = [
     Menu(title: 'Dashboard', icon: Icons.dashboard),
-    Menu(title: 'Verify Contract Owner', icon: Icons.verified_user),
+    Menu(title: 'Verify Charging Station Owner', icon: Icons.verified_user),
     Menu(title: 'Verify Request', icon: Icons.web),
     Menu(title: 'Transfer Ownership', icon: Icons.transform),
     Menu(title: 'Logout', icon: Icons.logout),
@@ -48,12 +51,15 @@ class _LandInspectorState extends State<LandInspector> {
     setState(() {});
   }
 
+  List<List<dynamic>> allLandInspectorInfo = [];
+
   @override
   Widget build(BuildContext context) {
     model = Provider.of<LandRegisterModel>(context);
     model2 = Provider.of<MetaMaskProvider>(context);
     if (isFirstTimeLoad) {
       getUserCount();
+      getLandInspectorInfo();
     }
     return Scaffold(
       key: _scaffoldKey,
@@ -93,6 +99,31 @@ class _LandInspectorState extends State<LandInspector> {
                     _container(2),
                   ],
                 ),
+                Container(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'Prosumer Details',
+                          style: TextStyle(color: Colors.red, fontSize: 30),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        Text(
+                          'Name:' + proname,
+                          style:
+                              TextStyle(color: Colors.blueAccent, fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Energy Available: ' + energyavailable.toString(),
+                          style: TextStyle(color: Colors.blue, fontSize: 20),
+                        ),
+                      ]),
+                )
               ],
             ))
           else if (screen == 1)
@@ -119,6 +150,35 @@ class _LandInspectorState extends State<LandInspector> {
         ],
       ),
     );
+  }
+
+  getLandInspectorInfo() async {
+    List<dynamic> landList;
+    if (connectedWithMetamask)
+      landList = await model2.allLandInspectorList();
+    else
+      landList = await model.allLandInspectorList();
+
+    print("works");
+    print(landList);
+
+    List<List<dynamic>> info = [];
+    List<dynamic> temp;
+    for (int i = 0; i < landList.length; i++) {
+      if (connectedWithMetamask)
+        temp = await model2.landInspectorInfo(landList[i]);
+      else
+        temp = await model.landInspectorInfo(landList[i]);
+      info.add(temp);
+    }
+    allLandInspectorInfo = info;
+    setState(() {
+      proname = allLandInspectorInfo[0][2];
+      energyavailable = allLandInspectorInfo[0][6];
+    });
+
+    print("came here ammaa");
+    print(allLandInspectorInfo);
   }
 
   getLandList() async {
@@ -693,7 +753,7 @@ class _LandInspectorState extends State<LandInspector> {
         ],
         color: Color(0xFF272D34),
       ),
-      width: 250,
+      width: 350,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -701,14 +761,18 @@ class _LandInspectorState extends State<LandInspector> {
           const SizedBox(
             width: 20,
           ),
+          const SizedBox(
+            height: 20,
+          ),
           const Icon(
             Icons.person,
+            color: Colors.white,
             size: 50,
           ),
           const SizedBox(
             width: 30,
           ),
-          const Text('Land Inspector',
+          const Text('Energy Provider',
               style: TextStyle(
                   color: Colors.white70,
                   fontSize: 18,

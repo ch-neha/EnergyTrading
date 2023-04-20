@@ -6,7 +6,7 @@ import 'package:land_registration/constant/loadingScreen.dart';
 import 'package:land_registration/screens/registerUser.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import '../providers/LandRegisterModel.dart';
+import '../providers/RequestModel.dart';
 import '../constant/utils.dart';
 
 class CheckPrivateKey extends StatefulWidget {

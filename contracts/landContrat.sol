@@ -37,6 +37,7 @@ contract Land {
         uint age;
         string designation;
         string city;
+        uint energyavailable;
     }
 
     struct LandRequest{
@@ -88,13 +89,13 @@ contract Land {
 
     //-----------------------------------------------LandInspector-----------------------------------------------
 
-    function addLandInspector(address _addr,string memory _name, uint _age, string memory _designation,string memory _city) public returns(bool){
+    function addLandInspector(address _addr,string memory _name, uint _age, string memory _designation,string memory _city, uint _energyavailable) public returns(bool){
         if(contractOwner!=msg.sender)
             return false;
         require(contractOwner==msg.sender);
         RegisteredInspectorMapping[_addr]=true;
         allLandInspectorList[1].push(_addr);
-        InspectorMapping[_addr] = LandInspector(inspectorsCount,_addr,_name, _age, _designation,_city);
+        InspectorMapping[_addr] = LandInspector(inspectorsCount,_addr,_name, _age, _designation,_city, _energyavailable);
         return true;
     }
 
