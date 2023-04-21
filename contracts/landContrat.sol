@@ -28,6 +28,7 @@ contract Land {
         string city;
         string email;
         bool isUserVerified;
+        address payable prosumeAdd;
     }
 
     struct LandInspector {
@@ -152,13 +153,14 @@ contract Land {
         userCount++;
         allUsersList[1].push(msg.sender);
         AllUsers[userCount]=msg.sender;
-        UserMapping[msg.sender] = User(msg.sender, _name, _age, _city,_email, false);
+        UserMapping[msg.sender] = User(msg.sender, _name, _age, _city,_email, false, msg.sender);
         //emit Registration(msg.sender);
     }
 
     function verifyUser(address _userId) public{
         require(isLandInspector(msg.sender));
         UserMapping[_userId].isUserVerified=true;
+        UserMapping[_userId].prosumeAdd=msg.sender;
     }
     function isUserVerified(address id) public view returns(bool){
         return UserMapping[id].isUserVerified;
@@ -177,6 +179,11 @@ contract Land {
         MyLands[msg.sender].push(landsCount);
         allLandList[1].push(landsCount);
         // emit AddingLand(landsCount);
+
+        requestCount++;
+        LandRequestMapping[requestCount]=LandRequest(requestCount,UserMapping[msg.sender].prosumerAdd,lands[landsCount].ownerAddress,landsCount,reqStatus.requested,false);
+        MyReceivedLandRequest[UserMapping[msg.sender].prosumerAdd].push(requestCount);
+        MySentLandRequest[msg.sender].push(requestCount);
     }
 
     function ReturnAllLandList() public view returns(uint[] memory)

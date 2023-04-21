@@ -30,14 +30,23 @@ class _LandInspectorState extends State<LandInspector> {
   bool isFirstTimeLoad = true;
   dynamic userCount = -1, landCount = -1;
   bool isLoading = false;
+  List<List<dynamic>> receivedRequestInfo = [];
 
   List<Menu> menuItems = [
     Menu(title: 'Dashboard', icon: Icons.dashboard),
     Menu(title: 'Verify Charging Station Owner', icon: Icons.verified_user),
     Menu(title: 'Verify Request', icon: Icons.web),
-    Menu(title: 'Transfer Ownership', icon: Icons.transform),
+    // Menu(title: 'Transfer Ownership', icon: Icons.transform),
     Menu(title: 'Logout', icon: Icons.logout),
   ];
+
+  Map<String, String> requestStatus = {
+    '0': 'Pending',
+    '1': 'Accepted',
+    '2': 'Rejected',
+    '3': 'Payment Done',
+    '4': 'Completed'
+  };
 
   getUserCount() async {
     if (connectedWithMetamask) {
@@ -137,19 +146,202 @@ class _LandInspectorState extends State<LandInspector> {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(25),
-                child: landList(),
+                child: receivedRequest(),
               ),
             )
-          else if (screen == 3)
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(25),
-                child: transferOwnershipWidget(),
-              ),
-            )
+          // else if (screen == 3)
+          //   Expanded(
+          //     child: Container(
+          //       padding: const EdgeInsets.all(25),
+          //       child: transferOwnershipWidget(),
+          //     ),
+          //   )
         ],
       ),
     );
+  }
+
+  Widget receivedRequest() {
+    return ListView.builder(
+      itemCount:
+          receivedRequestInfo == null ? 1 : receivedRequestInfo.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == 0) {
+          return Column(
+            children: [
+              const Divider(
+                height: 15,
+              ),
+              Row(
+                children: const [
+                  Expanded(
+                    child: Text(
+                      '#',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    flex: 1,
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Land Id',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    flex: 1,
+                  ),
+                  Expanded(
+                      child: Center(
+                        child: Text('Buyer Address',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      flex: 5),
+                  Expanded(
+                    child: Center(
+                      child: Text('Status',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    flex: 3,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text('Payment Done',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    flex: 2,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text('Reject',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    flex: 2,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text('Accept',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    flex: 2,
+                  )
+                ],
+              ),
+              const Divider(
+                height: 15,
+              )
+            ],
+          );
+        }
+        index -= 1;
+        List<dynamic> data = receivedRequestInfo[index];
+        return Container(
+          height: 60,
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text((index + 1).toString()),
+                flex: 1,
+              ),
+              Expanded(child: Center(child: Text(data[3].toString())), flex: 1),
+              Expanded(
+                  child: Center(
+                    child: Text(data[2].toString()),
+                  ),
+                  flex: 5),
+              Expanded(
+                  child: Center(
+                    child: Text(requestStatus[data[4].toString()].toString()),
+                  ),
+                  flex: 3),
+              Expanded(child: Center(child: Text(data[5].toString())), flex: 2),
+              Expanded(
+                  child: Center(
+                    child: ElevatedButton(
+                        style:
+                            ElevatedButton.styleFrom(primary: Colors.redAccent),
+                        onPressed: data[4].toString() != '0'
+                            ? null
+                            : () async {
+                                SmartDialog.showLoading();
+                                try {
+                                  if (connectedWithMetamask) {
+                                    await model2.rejectRequest(data[0]);
+                                  } else {
+                                    await model.rejectRequest(data[0]);
+                                  }
+                                  await getMyReceivedRequest();
+                                } catch (e) {
+                                  print(e);
+                                }
+
+                                //await Future.delayed(Duration(seconds: 2));
+                                SmartDialog.dismiss();
+                              },
+                        child: const Text('Reject')),
+                  ),
+                  flex: 2),
+              Expanded(
+                  child: Center(
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.greenAccent),
+                        onPressed: data[4].toString() != '0'
+                            ? null
+                            : () async {
+                                SmartDialog.showLoading();
+                                try {
+                                  if (connectedWithMetamask) {
+                                    await model2.acceptRequest(data[0]);
+                                  } else {
+                                    await model.acceptRequest(data[0]);
+                                  }
+                                  await getMyReceivedRequest();
+                                } catch (e) {
+                                  print(e);
+                                }
+
+                                //await Future.delayed(Duration(seconds: 2));
+                                SmartDialog.dismiss();
+                              },
+                        child: const Text('Accept')),
+                  ),
+                  flex: 2),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  getMyReceivedRequest() async {
+    receivedRequestInfo = [];
+    setState(() {
+      isLoading = true;
+    });
+    List<dynamic> requestList;
+    if (connectedWithMetamask) {
+      print("came here getMyReceivedRequest");
+      requestList = await model2.myReceivedRequest();
+      print(requestList);
+    } else {
+      requestList = await model.myReceivedRequest();
+    }
+
+    List<dynamic> temp;
+    for (int i = 0; i < requestList.length; i++) {
+      if (connectedWithMetamask) {
+        temp = await model2.requestInfo(requestList[i]);
+      } else {
+        temp = await model.requestInfo(requestList[i]);
+      }
+      receivedRequestInfo.add(temp);
+      isLoading = false;
+      setState(() {});
+    }
+    isLoading = false;
+    //  screen = 4;
+    setState(() {});
   }
 
   getLandInspectorInfo() async {
@@ -795,7 +987,7 @@ class _LandInspectorState extends State<LandInspector> {
                   //animationController: _animationController,
                   isSelected: screen == index,
                   onTap: () {
-                    if (index == 4) {
+                    if (index == 3) {
                       Navigator.pop(context);
                       // Navigator.push(
                       //     context,
@@ -808,7 +1000,7 @@ class _LandInspectorState extends State<LandInspector> {
                     if (index == 0) getUserCount();
                     if (index == 1) getUserList();
                     if (index == 2) getLandList();
-                    if (index == 3) paymentDoneList();
+                    // if (index == 3) paymentDoneList();
                     setState(() {
                       screen = index;
                     });

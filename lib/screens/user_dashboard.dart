@@ -368,14 +368,14 @@ class _UserDashBoardState extends State<UserDashBoard> {
             myLands()
           // else if (screen == 3)
           //   landGallery()
-          else if (screen == 3)
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(25),
-                child: receivedRequest(),
-              ),
-            )
-          else if (screen == 4)
+          // else if (screen == 3)
+          //   Expanded(
+          //     child: Container(
+          //       padding: const EdgeInsets.all(25),
+          //       child: receivedRequest(),
+          //     ),
+          //   )
+          else if (screen == 2)
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(25),
