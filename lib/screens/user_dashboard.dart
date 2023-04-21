@@ -699,9 +699,9 @@ class _UserDashBoardState extends State<UserDashBoard> {
                   landInfo[index][2].toString(),
                   landInfo[index][3].toString(),
                   landInfo[index][6],
-                  () =>
-                      confirmDialog('Are you sure to make it on sell?', context,
-                          () async {
+                  () => confirmDialog(
+                          'Are you sure you want to proceed with Payment?',
+                          context, () async {
                         SmartDialog.showLoading();
                         if (connectedWithMetamask) {
                           await model2.makeForSell(landInfo[index][0]);
